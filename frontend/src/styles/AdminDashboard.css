@@ -1,0 +1,130 @@
+/* ======= MAIN LAYOUT ======= */
+.admin-layout {
+    display: flex;
+    height: 100vh; /* Full height */
+    width: 100vw;  /* Full width */
+    overflow: hidden;
+}
+
+
+
+
+/* Dashboard Header */
+.admin-header {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Subtext Below Header */
+.admin-subtext {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* ======= FIXED TABLE WIDTH ======= */
+.table-container {
+    width: 850px; /* FIXED TABLE WIDTH */
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+/* User Table */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Header */
+.user-table th {
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+/* Table Rows */
+.user-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Button Container */
+.user-table td:last-child {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* ======= BUTTON STYLING ======= */
+.btn-edit, .btn-danger {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 80px;
+}
+
+/* Edit Button */
+.btn-edit {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* ======= RESPONSIVENESS ======= */
+@media (max-width: 1024px) {
+    
+    .table-container {
+        width: 750px;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    .table-container {
+        width: 650px;
+    }
+}
+
+@media (max-width: 600px) {
+   
+    .table-container {
+        width: 580px;
+    }
+}
+
+@media (max-width: 500px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+    
+    .table-container {
+        width: 100%;
+    }
+}

@@ -1,0 +1,665 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* ======= GLOBAL STYLES ======= */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* ======= NAVIGATION BAR ======= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #007bff;
+  color: white;
+  padding: 15px 20px;
+}
+
+.navbar-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+}
+
+/* Tabs (Navigation Buttons) */
+.tab {
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+/* Logout Button */
+.tab-danger {
+  padding: 10px 15px;
+  background: #dc3545;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  border-radius: 5px;
+}
+
+.tab-danger:hover {
+  background: #b02a37;
+}
+
+/* ======= MAIN CONTENT ======= */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  height: 100vh; /* Full Height */
+  background-color: #f4f4f4;
+  margin-left: 250px; /* Push right, same as sidebar width */
+  width: calc(100% - 250px); /* Ensure it fills the remaining space */
+}
+
+
+.header {
+  font-size: 26px;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.info-text {
+  font-size: 18px;
+  color: #555;
+}
+
+/* ======= LOGIN PAGE STYLES ======= */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background: #f4f4f4;
+}
+
+.login-card {
+  width: 350px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-header {
+  font-size: 24px;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* ======= INPUT FIELDS ======= */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* ======= BUTTON STYLES ======= */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+/* ======= ERROR MESSAGE ======= */
+.error-message {
+  color: red;
+  background: #ffefef;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* ======= REGISTER PAGE STYLES ======= */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background: #f4f4f4;
+}
+
+.register-card {
+  width: 350px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.register-header {
+  font-size: 24px;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* ======= ADMIN DASHBOARD LAYOUT ======= */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ======= SIDEBAR ======= */
+.sidebar {
+  width: 260px; /* Sidebar Fixed Width */
+  height: 100vh; /* Full Height */
+  background-color: #007bff;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Start items from top */
+  align-items: flex-start; /* Align items to the left */
+  position: fixed; /* Fix the sidebar */
+  top: 0;
+  left: 0;
+  overflow-y: auto; /* Allow scrolling if needed */
+  z-index: 1000;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+.logout-btn {
+  background: #dc3545;
+  margin-top: auto;
+}
+
+.logout-btn:hover {
+  background: #b02a37;
+}
+
+/* ======= ADMIN CONTENT ======= */
+.admin-content {
+  flex-grow: 1;
+  padding: 20px;
+  background: #f4f4f4;
+}
+
+.admin-header {
+  color: #007bff;
+  font-size: 24px;
+}
+
+.admin-subtext {
+  color: #555;
+}
+
+
+/* ======= TABLE STYLES ======= */
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.user-table th, .user-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.user-table th {
+  background: #007bff;
+  color: white;
+}
+
+/* ======= EDIT & DELETE BUTTONS ======= */
+.btn-edit {
+  background: #ffc107;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-edit:hover {
+  background: #e0a800;
+  transform: scale(1.05);
+}
+
+.btn-danger {
+  background: #dc3545;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+/* ======= CREATE USER PAGE ======= */
+.create-user-page {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #007bff;
+  padding: 20px;
+  color: white;
+}
+
+.sidebar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.logout-btn {
+  background-color: red;
+  margin-top: 10px;
+}
+
+
+.create-user-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-input, .user-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.add-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* ===== CREATE USER PAGE ===== */
+.create-user-page {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Page Header */
+.create-user-page h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* User Input Fields */
+.user-input, .user-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+  margin-bottom: 10px;
+}
+
+.user-input:focus, .user-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Buttons */
+.create-user-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Back Button */
+.back-btn {
+  background-color: #6c757d; /* Grey */
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 48%;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* Create User Button */
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 255px; /* Limits button width */
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* Footer Styling */
+.footer {
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #333;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #ddd;
+}
+
+
+.add-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .create-user-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .back-btn, .add-btn {
+    width: 100%;
+  }
+}
+/* ===== TOP NAVIGATION BAR ===== */
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #c32f4a;
+  color: black;
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+/* Adjust body padding to prevent content from hiding behind the fixed navbar */
+body {
+  padding-top: 60px;
+}
+
+/* ======= EDIT USER PAGE ======= */
+.edit-user-page {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 25px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Page Header */
+.edit-user-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* Page Header */
+.create-user-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Labels */
+.edit-label {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.create-label {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+}
+
+
+/* Input Fields */
+.user-input, .user-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+  margin-bottom: 10px;
+}
+
+.user-input:focus, .user-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Buttons */
+.edit-user-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* Save Button */
+.save-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 48%;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Cancel Button */
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 48%;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .edit-user-buttons {
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  .save-btn, .cancel-btn {
+      width: 100%;
+  }
+}
+
+.generate-btn {
+  background-color: #22d61c; /* Blue color */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  margin-bottom: 20px;
+  display: block; /* Ensures it's on a new line */
+}
+
+.generate-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
