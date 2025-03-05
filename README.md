@@ -1,5 +1,7 @@
 # Hostel Management App - Setup Guide
 
+This is a **Full Stack Hostel Management System** built using **React (Frontend) and Django (Backend)** with **SQLite** DB
+
 ## Prerequisites
 
 - Install **Visual Studio Code** from [here](https://code.visualstudio.com/download)
