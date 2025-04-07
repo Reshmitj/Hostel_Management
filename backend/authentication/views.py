@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import UserSerializer
+from booking.services import auto_assign_room_to_student 
 
 User = get_user_model()
 
@@ -37,8 +38,16 @@ class RegisterUserView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            
+            # ✅ Auto-assign room if student
+            if user.role == "student":
+                assigned = auto_assign_room_to_student(user)
+                if not assigned:
+                    return Response({"message": "User registered, but no rooms available!"}, status=status.HTTP_201_CREATED)
+
             return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

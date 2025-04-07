@@ -44,8 +44,14 @@ const Billing = () => {
     <div className="admin-layout">
       <Sidebar role={role} />
       <div className="main-content">
-        <h2 className="admin-header">Billing Invoices</h2>
-        <p className="admin-subtext">View and manage student billing invoices.</p>
+        <h2 className="admin-header">
+          {role === "admin" ? "Billing Invoices" : "My Invoices"}
+        </h2>
+        <p className="admin-subtext">
+          {role === "admin"
+            ? "View and manage student billing invoices."
+            : "Here are your generated invoices."}
+        </p>
 
         {role === "admin" && (
           <button className="generate-btn" onClick={handleGenerateInvoices}>
@@ -60,7 +66,7 @@ const Billing = () => {
             <table className="user-table">
               <thead>
                 <tr>
-                  <th>Student</th>
+                  {role === "admin" && <th>Student</th>}
                   <th>Amount</th>
                   <th>Date</th>
                 </tr>
@@ -68,7 +74,7 @@ const Billing = () => {
               <tbody>
                 {invoices.map((invoice) => (
                   <tr key={invoice.id}>
-                    <td>{invoice.student}</td>
+                    {role === "admin" && <td>{invoice.student}</td>}
                     <td>${invoice.amount}</td>
                     <td>{new Date(invoice.created_on).toLocaleDateString()}</td>
                   </tr>

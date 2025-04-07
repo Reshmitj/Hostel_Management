@@ -36,6 +36,7 @@ const Sidebar = ({ role }) => {
           <>
             <button onClick={() => navigate("/guest-dashboard")} className="sidebar-btn">🏠 Home</button>
             <button onClick={() => navigate("/request-room")} className="sidebar-btn">🛏️ Request Room</button>
+            <button onClick={() => navigate("/invoices")} className="sidebar-btn">📄 My Invoices</button> {/* ✅ NEW */}
           </>
         )}
 

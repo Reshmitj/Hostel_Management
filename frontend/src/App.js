@@ -11,6 +11,8 @@ import CreateUser from "./pages/CreateUser";
 import EditUser from "./pages/EditUser";
 import RoomManagement from "./pages/RoomManagement";
 import Footer from "./components/Footer";
+import BookRoom from "./pages/BookRoom";
+import RequestRoom from "./pages/RequestRoom"; 
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const navigate = useNavigate();
@@ -56,7 +58,10 @@ function App() {
                   <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
                   <Route path="/visitor-log" element={<ProtectedRoute><VisitorLog /></ProtectedRoute>} />
                   <Route path="/edit-user/:id" element={<EditUser />} />
+                  <Route path="/book-room" element={<BookRoom />} />
+                  <Route path="/request-room" element={<ProtectedRoute><RequestRoom /></ProtectedRoute>} />
                   <Route path="/rooms" element={<ProtectedRoute adminOnly><RoomManagement /></ProtectedRoute>} />
+                  <Route path="/invoices" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
                 <Footer />

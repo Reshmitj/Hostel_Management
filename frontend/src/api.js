@@ -198,6 +198,21 @@ export const getUserProfile = async () => {
   }
 };
 
+// api.js
+
+export const getAssignedRoom = async (token) => {
+  const response = await fetch("http://127.0.0.1:8000/api/assigned-room/", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch assigned room");
+  }
+  return await response.json();
+};
+
+
 // ✅ Logout User
 export const logoutUser = () => {
   localStorage.removeItem("token");

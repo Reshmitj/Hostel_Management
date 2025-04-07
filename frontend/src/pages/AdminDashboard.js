@@ -2,14 +2,15 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar"; // Import Sidebar component
 
-
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username") || "Admin";
 
+  // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/auth/admin-users/", {
@@ -26,54 +27,98 @@ const AdminDashboard = () => {
     }
   }, [token]);
 
+  // Fetch guest bookings
+  // AdminDashboard.js
+const fetchBookings = useCallback(async () => {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/guest-booking/all/", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    if (Array.isArray(data)) {
+      setBookings(data);
+    } else {
+      console.error("Unexpected data format:", data);
+    }
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+  }
+}, [token]);
+
+
   useEffect(() => {
     if (!token || role !== "admin") {
       navigate("/login");
     } else {
       fetchUsers();
+      fetchBookings();
     }
-  }, [token, role, navigate, fetchUsers]); 
+  }, [token, role, navigate, fetchUsers, fetchBookings]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-        const csrfToken = getCookie("csrftoken");  // Get CSRF Token
-        const response = await fetch(`http://127.0.0.1:8000/api/auth/admin/users/${id}/`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
-                "X-CSRFToken": csrfToken,  // Include CSRF token
-                "Content-Type": "application/json",
-            },
-            credentials: "include",  // Required for CSRF
-        });
+      const csrfToken = getCookie("csrftoken");  // Get CSRF Token
+      const response = await fetch(`http://127.0.0.1:8000/api/auth/admin/users/${id}/`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          "X-CSRFToken": csrfToken,  // Include CSRF token
+          "Content-Type": "application/json",
+        },
+        credentials: "include",  // Required for CSRF
+      });
 
-        if (response.ok) {
-            setUsers(users.filter((user) => user.id !== id));
-        } else {
-            alert("Error: Could not delete user. Please try again.");
-        }
+      if (response.ok) {
+        setUsers(users.filter((user) => user.id !== id));
+      } else {
+        alert("Error: Could not delete user. Please try again.");
+      }
     } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("Something went wrong. Please try again.");
+      console.error("Error deleting user:", error);
+      alert("Something went wrong. Please try again.");
     }
-};
+  };
 
-// Function to get CSRF token from cookies
-function getCookie(name) {
+  const handleBookingStatusChange = async (bookingId, status) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/guest-booking/${bookingId}/status/`, {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+  
+      if (response.ok) {
+        alert(`Booking ${status} successfully.`);
+        setBookings((prevBookings) =>
+          prevBookings.map((booking) =>
+            booking.id === bookingId ? { ...booking, status } : booking
+          )
+        );
+      } else {
+        alert("Failed to update booking status.");
+      }
+    } catch (error) {
+      console.error("Error updating booking status:", error);
+    }
+  };
+
+  // Function to get CSRF token from cookies
+  function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
-        document.cookie.split(";").forEach((cookie) => {
-            if (cookie.trim().startsWith(name + "=")) {
-                cookieValue = decodeURIComponent(cookie.trim().substring(name.length + 1));
-            }
-        });
+      document.cookie.split(";").forEach((cookie) => {
+        if (cookie.trim().startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.trim().substring(name.length + 1));
+        }
+      });
     }
     return cookieValue;
-}
-
-
+  }
 
   return (
     <div className="admin-layout">
@@ -83,9 +128,10 @@ function getCookie(name) {
       {/* Main Content */}
       <div className="main-content">
         <h2 className="admin-header">Admin Dashboard</h2>
-        <p className="admin-subtext">Welcome, {username}! Manage users below.</p>
+        <p className="admin-subtext">Welcome, {username}! Manage users and bookings below.</p>
 
         {/* Users Table */}
+        <h3>Users</h3>
         <div className="table-container">
           <table className="user-table">
             <thead>
@@ -103,8 +149,56 @@ function getCookie(name) {
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>
-                  <button onClick={() => navigate(`/edit-user/${user.id}`)} className="btn-edit">Edit</button>
-                  <button onClick={() => handleDelete(user.id)} className="btn-danger">Delete</button>
+                    <button onClick={() => navigate(`/edit-user/${user.id}`)} className="btn-edit">
+                      Edit
+                    </button>
+                    <button onClick={() => handleDelete(user.id)} className="btn-danger">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Guest Bookings Table */}
+        <h3>Guest Bookings</h3>
+        <div className="table-container">
+          <table className="user-table">
+            <thead>
+              <tr>
+                <th>Guest Name</th>
+                <th>Purpose</th>
+                <th>Room</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookings.map((booking) => (
+                <tr key={booking.id}>
+                  <td>{booking.guest_name}</td>
+                  <td>{booking.purpose}</td>
+                  <td>{booking.room ? booking.room.room_number : "N/A"}</td>
+                  <td>{booking.status}</td>
+                  <td>
+                    {booking.status === "pending" && (
+                      <>
+                        <button
+                          onClick={() => handleBookingStatusChange(booking.id, "approved")}
+                          className="approve-btn"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleBookingStatusChange(booking.id, "rejected")}
+                          className="reject-btn"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
