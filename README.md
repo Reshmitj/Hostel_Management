@@ -23,6 +23,7 @@ This is a **Full Stack Hostel Management System** built using **React (Frontend)
 2. Run the following command:
    ```sh
    cd backend
+   pip install django
    python .\manage.py runserver
    ```
 
