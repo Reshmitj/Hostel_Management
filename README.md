@@ -23,6 +23,8 @@ This is a **Full Stack Hostel Management System** built using **React (Frontend)
 2. Run the following command:
    ```sh
    cd backend
+   pip install django
+   python .\manage.py migrate
    python .\manage.py runserver
    ```
 
@@ -32,12 +34,10 @@ This is a **Full Stack Hostel Management System** built using **React (Frontend)
 2. Run the following commands:
    ```sh
    cd frontend
+   npm install
    npm start
    ```
-3. If you face any issues, try resolving them by running:
-   ```sh
-   npm install
-   ```
+
 
 ---
 **Happy Coding! 🚀**
