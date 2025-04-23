@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar"; // Import Sidebar component
+import Sidebar from "./Sidebar";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username") || "Admin";
 
-  // Fetch users
+  // ✅ Fetch users
   const fetchUsers = useCallback(async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/auth/admin-users/", {
@@ -27,25 +27,24 @@ const AdminDashboard = () => {
     }
   }, [token]);
 
-  // Fetch guest bookings
-  // AdminDashboard.js
-const fetchBookings = useCallback(async () => {
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/guest-booking/all/", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    if (Array.isArray(data)) {
-      setBookings(data);
-    } else {
-      console.error("Unexpected data format:", data);
+  // ✅ Fetch guest bookings
+  const fetchBookings = useCallback(async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/guest-booking/all/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setBookings(data);
+      } else {
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
     }
-  } catch (error) {
-    console.error("Error fetching bookings:", error);
-  }
-}, [token]);
+  }, [token]);
 
-
+  // ✅ Run on mount
   useEffect(() => {
     if (!token || role !== "admin") {
       navigate("/login");
@@ -55,19 +54,20 @@ const fetchBookings = useCallback(async () => {
     }
   }, [token, role, navigate, fetchUsers, fetchBookings]);
 
+  // ✅ Delete user
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      const csrfToken = getCookie("csrftoken");  // Get CSRF Token
+      const csrfToken = getCookie("csrftoken");
       const response = await fetch(`http://127.0.0.1:8000/api/auth/admin/users/${id}/`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-          "X-CSRFToken": csrfToken,  // Include CSRF token
+          Authorization: `Bearer ${token}`,
+          "X-CSRFToken": csrfToken,
           "Content-Type": "application/json",
         },
-        credentials: "include",  // Required for CSRF
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -81,17 +81,23 @@ const fetchBookings = useCallback(async () => {
     }
   };
 
+  // ✅ Update booking status
   const handleBookingStatusChange = async (bookingId, status) => {
+    if (!bookingId) {
+      console.error("Booking ID is missing");
+      return;
+    }
+
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/guest-booking/${bookingId}/status/`, {
         method: "PATCH",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ status }),
       });
-  
+
       if (response.ok) {
         alert(`Booking ${status} successfully.`);
         setBookings((prevBookings) =>
@@ -107,7 +113,7 @@ const fetchBookings = useCallback(async () => {
     }
   };
 
-  // Function to get CSRF token from cookies
+  // ✅ Get CSRF token from cookies
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
@@ -122,10 +128,7 @@ const fetchBookings = useCallback(async () => {
 
   return (
     <div className="admin-layout">
-      {/* Sidebar */}
       <Sidebar role={role} />
-
-      {/* Main Content */}
       <div className="main-content">
         <h2 className="admin-header">Admin Dashboard</h2>
         <p className="admin-subtext">Welcome, {username}! Manage users and bookings below.</p>
@@ -163,7 +166,7 @@ const fetchBookings = useCallback(async () => {
         </div>
 
         {/* Guest Bookings Table */}
-        <h3>Guest Bookings</h3>
+        <h3>Pending Guest Bookings</h3>
         <div className="table-container">
           <table className="user-table">
             <thead>
@@ -176,32 +179,30 @@ const fetchBookings = useCallback(async () => {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td>{booking.guest_name}</td>
-                  <td>{booking.purpose}</td>
-                  <td>{booking.room ? booking.room.room_number : "N/A"}</td>
-                  <td>{booking.status}</td>
-                  <td>
-                    {booking.status === "pending" && (
-                      <>
-                        <button
-                          onClick={() => handleBookingStatusChange(booking.id, "approved")}
-                          className="approve-btn"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleBookingStatusChange(booking.id, "rejected")}
-                          className="reject-btn"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {bookings
+                .filter((booking) => booking.status === "pending")
+                .map((booking) => (
+                  <tr key={booking.id}>
+                    <td>{booking.guest_name}</td>
+                    <td>{booking.purpose}</td>
+                    <td>{booking.room ? booking.room.room_number : "N/A"}</td>
+                    <td>{booking.status}</td>
+                    <td>
+                      <button
+                        onClick={() => handleBookingStatusChange(booking.id, "approved")}
+                        className="approve-btn"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleBookingStatusChange(booking.id, "rejected")}
+                        className="reject-btn"
+                      >
+                        Reject
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

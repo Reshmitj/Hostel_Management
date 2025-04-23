@@ -16,7 +16,7 @@ const RequestRoom = () => {
       const response = await fetch("http://127.0.0.1:8000/api/guest-booking/book/", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ room_type: roomType, purpose })
@@ -24,16 +24,20 @@ const RequestRoom = () => {
 
       const data = await response.json();
 
-      if (response.ok && data.room) {
-        setMessage(`✅ Room ${data.room.room_number} (${data.room.type}) assigned successfully.`);
+      if (data.alreadyBooked) {
+        setMessage("⚠️ You have already booked. Please wait for admin approval or check your dashboard.");
       } else if (response.ok) {
-        setMessage("✅ Room assigned successfully.");
+        if (data.room && data.room.room_number) {
+          setMessage(`✅ Room ${data.room.room_number} (${data.room.type}) requested successfully.`);
+        } else {
+          setMessage("✅ Room requested successfully.");
+        }
       } else {
-        setMessage(`❌ ${data.error || "Failed to request room"}`);
+        setMessage(`❌ ${data.error || data.message || "Failed to request room."}`);
       }
     } catch (error) {
       console.error("Error:", error);
-      setMessage("❌ Something went wrong.");
+      setMessage("❌ Something went wrong. Please try again.");
     }
   };
 
@@ -42,6 +46,7 @@ const RequestRoom = () => {
       <Sidebar role={role} />
       <div className="main-content">
         <h2 className="header">Request a Guest Room</h2>
+
         <form onSubmit={handleRequestRoom} className="create-user-container">
           <label>Room Type:</label>
           <select
@@ -68,7 +73,19 @@ const RequestRoom = () => {
         </form>
 
         {message && (
-          <p style={{ marginTop: "20px", color: message.startsWith("✅") ? "green" : "red" }}>
+          <p
+            style={{
+              marginTop: "20px",
+              textAlign: "center",
+              fontWeight: "500",
+              fontSize: "16px",
+              color: message.startsWith("✅")
+                ? "green"
+                : message.startsWith("❌")
+                ? "red"
+                : "orange"
+            }}
+          >
             {message}
           </p>
         )}

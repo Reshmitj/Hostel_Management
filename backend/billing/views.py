@@ -10,6 +10,7 @@ from booking.models import Booking
 from guest_booking.models import GuestBooking
 from datetime import date
 from decimal import Decimal
+from calendar import month_name
 
 class InvoiceListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -34,8 +35,13 @@ class GenerateInvoicesView(APIView):
             return Response({"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
 
         today = date.today()
+        month_label = month_name[today.month]
+
         if Invoice.objects.filter(created_on__month=today.month, created_on__year=today.year).exists():
-            return Response({"error": "Invoices for this month already exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": f"Invoices for {month_label} {today.year} already exist."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         users = CustomUser.objects.filter(role__in=["student", "guest"])
         invoices = []
@@ -46,7 +52,7 @@ class GenerateInvoicesView(APIView):
             elif user.role == "guest" and GuestBooking.objects.filter(guest_email=user.email).exists():
                 amount = Decimal("1500.00")
             else:
-                continue  # Skip users with no booking
+                continue
 
             invoice = Invoice(student=user, amount=amount, created_on=today)
             invoice.save()

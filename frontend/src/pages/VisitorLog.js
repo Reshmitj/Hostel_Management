@@ -55,26 +55,32 @@ const VisitorLog = () => {
         },
         body: JSON.stringify(newVisitor),
       });
-
+  
       if (response.ok) {
         fetchVisitors(); // Refresh visitor list
         setNewVisitor({ name: "", purpose: "" }); // Reset form
         setMessage("✅ Visitor logged successfully!");
+  
+        // Clear message after 3 seconds
+        setTimeout(() => setMessage(""), 3000);
       } else {
         setMessage("❌ Failed to log visitor.");
+        setTimeout(() => setMessage(""), 3000);
       }
     } catch (error) {
       console.error("Error logging visitor:", error);
       setMessage("❌ Something went wrong.");
+      setTimeout(() => setMessage(""), 3000);
     }
   };
+  
 
   // ✅ Delete Visitor Log Entry
   const handleDeleteVisitor = async (id) => {
     if (!window.confirm("Are you sure you want to delete this log?")) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/visitor-log/${id}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/visitor-log/${id}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

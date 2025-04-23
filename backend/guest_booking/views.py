@@ -7,6 +7,8 @@ from rooms.models import Room
 from .serializers import GuestBookingSerializer
 from guest_booking.models import GuestBooking
 
+
+
 class GuestRoomBookingView(APIView):
     permission_classes = [IsAuthenticated]  # ✅ Only logged-in users can access
 
@@ -19,7 +21,10 @@ class GuestRoomBookingView(APIView):
 
         # Prevent duplicate booking
         if GuestBooking.objects.filter(guest_email=user.email).exists():
-            return Response({"message": "Room already booked."}, status=status.HTTP_200_OK)
+              return Response({
+        "message": "Room already booked.",
+        "alreadyBooked": True  # ✅ custom flag
+    }, status=status.HTTP_200_OK)
 
         data = request.data
         available_room = Room.objects.filter(status='available').first()
@@ -48,7 +53,11 @@ class GuestRoomBookingView(APIView):
         if user.role == "admin":
             bookings = GuestBooking.objects.all()  # Admin can see all bookings
         elif user.role == "guest":
-            bookings = GuestBooking.objects.filter(guest_email=user.email)  # Guest can see only their own booking
+            booking = GuestBooking.objects.filter(guest_email=user.email, status="approved").first()
+            if not booking:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = GuestBookingSerializer(booking)
+            return Response(serializer.data)
         else:
             return Response({"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
 

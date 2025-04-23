@@ -35,7 +35,7 @@ const Billing = () => {
         alert("Invoices generated successfully!");
         window.location.reload();
       } catch (error) {
-        alert("Failed to generate invoices.");
+        alert("Already Generated for this month.");
       }
     }
   };

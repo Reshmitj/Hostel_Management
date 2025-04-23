@@ -13,4 +13,4 @@ class GuestBookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GuestBooking
-        fields = ['guest_name', 'guest_email', 'purpose', 'room', 'booked_on', 'status']
+        fields = ['id','guest_name', 'guest_email', 'purpose', 'room', 'booked_on', 'status']

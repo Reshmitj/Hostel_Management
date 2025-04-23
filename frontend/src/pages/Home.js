@@ -80,23 +80,33 @@ const Home = () => {
         )}
 
         {/* Guest Booking Info */}
-        {role === "guest" && !loading && assignedRoom && (
-    <div className="room-info" style={{
-      border: "2px solid #007bff",
-      borderRadius: "12px",
-      padding: "20px",
-      maxWidth: "400px",
-      margin: "20px auto",
-      backgroundColor: "#f0f8ff",
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-      fontSize: "16px"
-    }}>
-      <h3 style={{ color: "#007bff", marginBottom: "15px", textAlign: "center" }}>Your Booking Details</h3>
-      <p><strong>📌 Room:</strong> {assignedRoom.room.room_number} ({assignedRoom.room.type})</p>
-      <p><strong>📝 Purpose:</strong> {assignedRoom.purpose}</p>
-      <p><strong>📅 Booked on:</strong> {new Date(assignedRoom.booked_on).toLocaleDateString()}</p>
-    </div>
-  )}
+        {role === "guest" && !loading && assignedRoom && assignedRoom.status === "approved" && (
+  <div className="room-info" style={{
+    border: "2px solid #007bff",
+    borderRadius: "12px",
+    padding: "20px",
+    maxWidth: "400px",
+    margin: "20px auto",
+    backgroundColor: "#f0f8ff",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    fontSize: "16px"
+  }}>
+    
+    <h3 style={{ color: "#007bff", marginBottom: "15px", textAlign: "center" }}>Your Booking Details</h3>
+    <p><strong>📌 Room:</strong> {assignedRoom.room.room_number || "N/A"} ({assignedRoom.room.type || "N/A"})</p>
+    <p><strong>📝 Purpose:</strong> {assignedRoom.purpose || "N/A"}</p>
+    <p><strong>📅 Booked on:</strong> {new Date(assignedRoom.booked_on || Date.now()).toLocaleDateString()}</p>
+    
+  </div>
+)}
+
+{role === "guest" && !loading && assignedRoom && assignedRoom.status === "pending" && (
+  <p style={{ color: "orange" }}>
+    Your booking request is pending approval from the admin.
+  </p>
+)}
+
+
 
 
         {role === "guest" && !loading && !assignedRoom && (
